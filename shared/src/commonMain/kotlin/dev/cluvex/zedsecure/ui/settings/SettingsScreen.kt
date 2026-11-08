@@ -213,7 +213,7 @@ fun SettingsScreen(
             SettingsPage.SingBox -> SingBoxPage(settings, contentPadding, modifier, onUpdate)
             SettingsPage.Fragment -> FragmentPage(settings, contentPadding, modifier, onUpdate)
             SettingsPage.Observatory -> ObservatoryPage(settings, contentPadding, modifier, onUpdate, autoCountries)
-            SettingsPage.Advanced -> AdvancedPage(settings, contentPadding, modifier, onUpdate)
+            SettingsPage.Advanced -> AdvancedPage(settings, repository, contentPadding, modifier, onUpdate)
             SettingsPage.Mode -> ModePage(settings, contentPadding, modifier, onUpdate)
             SettingsPage.Routing -> RoutingScreen(settings, contentPadding, onUpdate, modifier, serverTargets, groupTargets)
             SettingsPage.PerApp -> PerAppProxyScreen(settings, contentPadding, onUpdate, modifier)
@@ -2310,6 +2310,7 @@ private fun ObservatoryPage(
 @Composable
 private fun AdvancedPage(
     s: AppSettings,
+    repository: dev.cluvex.zedsecure.data.config.ConfigRepository,
     contentPadding: PaddingValues,
     modifier: Modifier,
     onUpdate: ((AppSettings) -> AppSettings) -> Unit,
