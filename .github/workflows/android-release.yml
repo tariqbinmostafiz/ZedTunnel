@@ -2,17 +2,7 @@ name: android-release
 
 on:
   workflow_dispatch:
-    inputs:
-      signing_key:
-        description: "main = upstream CluvexStudio release key (not available in this fork); upload = this fork's own key"
-        type: choice
-        default: main
-        options: [main, upload]
   workflow_call:
-    inputs:
-      signing_key:
-        type: string
-        default: main
 
 permissions:
   contents: read
@@ -59,26 +49,15 @@ jobs:
 
       - name: Unlock signing
         env:
-          USE_PLAY: ${{ inputs.signing_key != 'upload' }}
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          PLAY_KEYSTORE_BASE64: ${{ secrets.PLAY_KEYSTORE_BASE64 }}
-          PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
-          PLAY_KEY_ALIAS: ${{ secrets.PLAY_KEY_ALIAS }}
-          PLAY_KEY_PASSWORD: ${{ secrets.PLAY_KEY_PASSWORD }}
         run: |
           umask 077
-          if [ "$USE_PLAY" = "true" ]; then
-            printf '%s' "$PLAY_KEYSTORE_BASE64" | base64 -d > release.keystore
-            STORE_PW="$PLAY_KEYSTORE_PASSWORD"; KEY_PW="$PLAY_KEY_PASSWORD"; ALIAS="$PLAY_KEY_ALIAS"
-          else
-            printf '%s' "$KEYSTORE_BASE64" | base64 -d > release.keystore
-            STORE_PW="$KEYSTORE_PASSWORD"; KEY_PW="$KEY_PASSWORD"; ALIAS="$KEY_ALIAS"
-          fi
-          { echo "storeFile=release.keystore"; echo "storePassword=$STORE_PW"
-            echo "keyPassword=$KEY_PW"; echo "keyAlias=$ALIAS"; } > keystore.properties
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > release.keystore
+          { echo "storeFile=release.keystore"; echo "storePassword=$KEYSTORE_PASSWORD"
+            echo "keyPassword=$KEY_PASSWORD"; echo "keyAlias=$KEY_ALIAS"; } > keystore.properties
 
       - name: Build
         run: ./gradlew --warning-mode all :app:assembleRelease
