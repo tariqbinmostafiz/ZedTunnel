@@ -2477,8 +2477,8 @@ private fun SettingsBackupGroup(
     confirmRestore?.let { data ->
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { confirmRestore = null },
-            title = { Text(stringResource(Res.string.settings_full_restore)) },
-            text = { Text(stringResource(Res.string.settings_full_restore_confirm)) },
+            title = { androidx.compose.material3.Text(stringResource(Res.string.settings_full_restore)) },
+            text = { androidx.compose.material3.Text(stringResource(Res.string.settings_full_restore_confirm)) },
             confirmButton = {
                 androidx.compose.material3.TextButton(onClick = {
                     onUpdate { data.settings }
@@ -2487,11 +2487,11 @@ private fun SettingsBackupGroup(
                     dev.cluvex.zedsecure.domain.usage.UsageLedger.restore(data.usage)
                     confirmRestore = null
                     platform.toast(fullRestored)
-                }) { Text(stringResource(Res.string.action_restore)) }
+                }) { androidx.compose.material3.Text(stringResource(Res.string.action_restore)) }
             },
             dismissButton = {
                 androidx.compose.material3.TextButton(onClick = { confirmRestore = null }) {
-                    Text(stringResource(Res.string.action_cancel))
+                    androidx.compose.material3.Text(stringResource(Res.string.action_cancel))
                 }
             },
         )
